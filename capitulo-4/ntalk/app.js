@@ -1,7 +1,6 @@
 const express = require('express')
 const path = require('path')
-const routes = require('./routes/index')
-const users = require('./routes/users')
+const consign = require('consign') // Para importar modulos.
 const app = express()
 
 // Configurações Internas
@@ -10,7 +9,12 @@ app.set('view engine', 'ejs')
 
 // Middlewares.
 app.use( express.static( path.join(__dirname, 'public') ) ) // Set arquivos estáticos
-app.use('/', routes) // Rotas
-app.use('/usuarios', users)
+
+// Carrega sozinho os modulos nas seguintes diretórios:
+consign({})
+  .include('models')
+  .then('controllers')
+  .then('routes')
+  .into(app)
 
 app.listen(3000, console.log('Ntalk no ar. http://localhost:3000'))
