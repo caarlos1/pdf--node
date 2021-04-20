@@ -1,12 +1,17 @@
 const express = require('express')
 const path = require('path')
+const http = require('http')
+const socketIO = require('socket.io')
 const consign = require('consign') // Para importar modulos.
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const expressSession = require('express-session')
 const methodOverride = require('method-override')
 const error = require('./middlewares/error')
+
 const app = express()
+const server = http.Server(app) // Configuração para usar o app como servidor http
+const io = socketIO(server) // Configurando o servidor do socket
 
 // Configurações Internas
 app.set('views', path.join(__dirname, 'views')) // Set views.
@@ -32,4 +37,15 @@ consign({})
 app.use(error.notFound)
 app.use(error.serverError)
 
-app.listen(3000, console.log('Ntalk no ar. http://localhost:3000'))
+// Conexão do Socket.io
+io.on('connection', (client) => {
+  // Quando o cliente mandar mensagem para o servidor:
+  client.on('send-server', (data) => {
+    const resposta = `<b> ${data.nome}:</b> ${data.msg} </br>`
+    client.emit('send-client', resposta) // Eviaa a resposta para o usuario.
+    client.broadcast.emit('send-client', resposta) // Envia a respostas para todos usuarios menos o emissor.
+  } )
+
+})
+
+server.listen(3000, console.log('Ntalk no ar. http://localhost:3000'))
