@@ -3,13 +3,15 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
+        const sala = '<%- sala %>' // recebe o nome da sala (hash)
+        socket.emit('create-room', sala) // Crio a sala com o nome
         socket.on('send-client', (msg) => {
             document.getElementById('chat').innerHTML += msg;
         });
         const enviar = () => {
             let msg = document.getElementById('msg');
             if(msg.value){
-                socket.emit('send-server', msg.value );
+                socket.emit('send-server', sala, msg.value );
                 msg.value = ''
             }
         };
