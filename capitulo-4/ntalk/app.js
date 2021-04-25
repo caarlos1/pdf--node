@@ -7,8 +7,18 @@ const bodyParser = require('body-parser')
 const cookie = require('cookie')
 const expressSession = require('express-session')
 const methodOverride = require('method-override')
+
+const mongoose = require('mongoose')
+const bluebird = require('bluebird')
+
 const config = require('./config')
 const error = require('./middlewares/error')
+
+//Habilitando as Promises no mongoose com o bluebird.
+mongoose.Promise = bluebird
+global.db = mongoose
+db.connect('mongodb://127.0.0.1:27017/ntalk', { useNewUrlParser: true, useUnifiedTopology: true } )
+
 
 const app = express()
 const server = http.Server(app) // Configuração para usar o app como servidor http

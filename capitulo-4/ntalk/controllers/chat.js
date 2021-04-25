@@ -1,6 +1,6 @@
 const crypto = require('crypto')
 
-module.exports = (app) => {
+module.exports = () => {
     const ChatController = {
         index (req, res) {
             const { sala } = req.query // Pego a query ?sala= da url para salvar o hash da conversa.

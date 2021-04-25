@@ -4,9 +4,11 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "eslint": "eslint --init"
   },
   "dependencies": {
+    "bluebird": "^3.7.2",
     "body-parser": "^1.18.3",
     "consign": "^0.1.6",
     "cookie-parser": "~1.4.4",
@@ -15,6 +17,10 @@
     "express-session": "^1.17.1",
     "http-errors": "~1.6.3",
     "method-override": "^3.0.0",
+    "mongoose": "^5.12.5",
     "socket.io": "^4.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.25.0"
   }
 }
