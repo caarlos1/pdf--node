@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon app.js",
-    "eslint": "eslint --init"
+    "test": "NOD_ENV=test mocha test/**/*.js --require should --exit"
   },
   "dependencies": {
     "bluebird": "^3.7.2",
@@ -22,6 +22,8 @@
     "socket.io": "^4.0.1"
   },
   "devDependencies": {
-    "eslint": "^7.25.0"
+    "mocha": "^8.3.2",
+    "should": "^13.2.3",
+    "supertest": "^6.1.3"
   }
 }
