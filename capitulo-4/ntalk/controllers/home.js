@@ -21,7 +21,6 @@ module.exports = (app) => {
                     res.redirect('/contatos')
                 } )
                 .catch( (err) => {
-                    console.log('ERROR ', err)
                     res.redirect('/')
                 })
         },
