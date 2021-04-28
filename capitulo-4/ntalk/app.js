@@ -3,22 +3,12 @@ const path = require('path')
 const http = require('http')
 const socketIO = require('socket.io')
 const consign = require('consign') // Para importar modulos.
-const bodyParser = require('body-parser')
 const cookie = require('cookie')
 const expressSession = require('express-session')
 const methodOverride = require('method-override')
 
-const mongoose = require('mongoose')
-const bluebird = require('bluebird')
-
 const config = require('./config')
 const error = require('./middlewares/error')
-
-//Habilitando as Promises no mongoose com o bluebird.
-mongoose.Promise = bluebird
-global.db = mongoose
-db.connect('mongodb://127.0.0.1:27017/ntalk', { useNewUrlParser: true, useUnifiedTopology: true } )
-
 
 const app = express()
 const server = http.Server(app) // Configuração para usar o app como servidor http
@@ -33,12 +23,14 @@ app.set('view engine', 'ejs')
 // Configurando a sessão do express.
 app.use( expressSession({
   store,
+  resave: true,
+  saveUninitialized: true,
   name: config.sessionKey,
   secret: config.sessionSecret,
 }) )
 
-app.use( bodyParser.json() )
-app.use( bodyParser.urlencoded() )
+app.use( express.json() )
+app.use( express.urlencoded( { extended: true } ) )
 app.use( methodOverride('_method') ) // Para conseguir enviar um put e delete pelo formulario, sem ajax.
 app.use( express.static( path.join(__dirname, 'public') ) ) // Set arquivos estáticos
 
@@ -77,3 +69,6 @@ app.use(error.notFound)
 app.use(error.serverError)
 
 server.listen(3000, console.log('Ntalk no ar. http://localhost:3000'))
+
+// Exportando o app para testes.
+module.exports = app
