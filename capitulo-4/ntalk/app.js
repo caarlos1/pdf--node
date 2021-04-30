@@ -10,11 +10,17 @@ const methodOverride = require('method-override')
 const config = require('./config')
 const error = require('./middlewares/error')
 
+// Adaptando a sessão para ser salva no redis.
+const redis = require('redis')
+const redisAdapter = require('socket.io-redis')
+const RedisStore = require('connect-redis')(expressSession)
+// Necessário criar o redisClient para instancia um objeto RedisSotore
+const redisClient = redis.createClient()
+
 const app = express()
 const server = http.Server(app) // Configuração para usar o app como servidor http
 const io = socketIO(server) // Configurando o servidor do socket
-// Dando store na sessão
-const store = new expressSession.MemoryStore() // Salva ar seção no store.
+const store = new RedisStore( {client: redisClient, prefix: config.sessionKey } )  // Objeto que vai salvar as sessões
 
 // Configurações Internas
 app.set('views', path.join(__dirname, 'views')) // Set views.
@@ -34,21 +40,17 @@ app.use( express.urlencoded( { extended: true } ) )
 app.use( methodOverride('_method') ) // Para conseguir enviar um put e delete pelo formulario, sem ajax.
 app.use( express.static( path.join(__dirname, 'public') ) ) // Set arquivos estáticos
 
-
+io.adapter( redisAdapter() ) ;
 io.use( (socket, next) => {
   const cookieData = socket.request.headers.cookie // Cookie que veio na request.
   const cookieObj = cookie.parse(cookieData) // Transformo o cookie em um objeto.
   const sessionHash = cookieObj[config.sessionKey] || ''
-  
   // .split cria um array procurando '.' pegando a informação a partir do incide 2 com .slice
   const sessionID = sessionHash.split('.')[0].slice(2)
 
   
-  store.all( (err, sessions) => {
-    const currentSession = sessions[sessionID]
-    if ( err || !currentSession )
-      return next(new Error('Acesso negado!'))
-
+  store.get( sessionID, (err, currentSession) => {
+    if ( err ) return next( new Error('Acesso negado!') )
     socket.handshake.session = currentSession
     return next()
   } )
@@ -57,7 +59,7 @@ io.use( (socket, next) => {
 
 // Carrega sozinho os modulos nas seguintes diretórios:
 // Middlewares...
-consign({})
+consign({ locale: 'pt-br', verbose: false, })
   .include('models')
   .then('controllers')
   .then('routes')

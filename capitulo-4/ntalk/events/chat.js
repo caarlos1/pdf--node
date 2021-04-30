@@ -2,27 +2,18 @@ const redis = require('redis').createClient()
 
 module.exports = (app, io) => {
 // Conexão do Socket.io
-    const onlines = {} // Usuários online.
     io.on('connection', (client) => {
         const { session } = client.handshake
         const { usuario } = session
 
-
         redis.sadd('onlines', usuario.email, () => {
-            redis.smembers('onlines', (err, emails) => {
+            redis.smembers('onlines', (err, emails) => {                
                 emails.forEach( email => {
                     client.emit('notify-onlines', email)
                     client.broadcast.emit('notify-onlines', email)
                 } )
             })
         })
-
-        // Crio uma chave e valor no objeto com email e email.
-        // onlines[usuario.email] = usuario.email
-        // for(let email in onlines){
-        //     client.emit('notify-onlines', email)
-        //     client.broadcast.emit('notify-onlines', email)
-        // }
         
         // Quando o cliente mandar mensagem para o servidor:
         client.on('send-server', (hashDaSala, msg) => {
@@ -32,7 +23,7 @@ module.exports = (app, io) => {
 
             redis.lpush(hashDaSala, resposta, () => {
                 client.broadcast.emit('new-message', novaMensagem) // Avisar que uma mensagem foi enviada paro o usulário.
-            io.to(hashDaSala).emit('send-client', resposta) // Envia a mensagem para a sala com o hash
+                io.to(hashDaSala).emit('send-client', resposta) // Envia a mensagem para a sala com o hash
             } )
         } )
 
