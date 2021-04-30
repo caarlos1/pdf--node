@@ -1,5 +1,6 @@
 const app = require('../../app')
 const request = require('supertest')(app)
+const should = require('should')
 
 describe( 'Controller contatos', () => {
     describe( 'Usuario não logado', () => {
@@ -37,7 +38,7 @@ describe( 'Controller contatos', () => {
         })
 
         it( 'DELETE "/contato/1" redireciona para GET "/"' , done => {
-            request.del('/contato/1')
+            request.delete('/contato/1')
                 .end( (err, res) => {
                     res.headers.location.should.eql('/')
                     done()

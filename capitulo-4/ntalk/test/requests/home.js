@@ -1,5 +1,6 @@
 const app = require('../../app')
 const request = require('supertest')(app)
+const should = require('should')
 
 describe('Controller home.', () => {
     it('GET "/" retorna status 200', done => {
