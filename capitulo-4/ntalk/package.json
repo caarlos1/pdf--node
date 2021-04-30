@@ -6,7 +6,7 @@
   "scripts": {
     "start": "DEBUG=* node app >> app.log",
     "nodemon": "nodemon app.js",
-    "test": "NOD_ENV=test mocha test/**/*.js --require should --exit"
+    "test": "NODE_ENV=test mocha test/**/*.js --require should --exit"
   },
   "dependencies": {
     "bluebird": "^3.7.2",

@@ -48,12 +48,17 @@ app.use( express.static( path.join(__dirname, 'public'),
 // { maxAge: 3600000 } 
 ) )
 
-// Configurando csurf.
-app.use( csurf() )
+// // Configuração do csurf para funcionar com os testes.
+if(process.env.NODE_ENV === 'test' )
+  app.use( csurf( { ignoreMethods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT'] }) )
+else
+  app.use( csurf() )
+
 app.use( (req, res, next) => {
   res.locals._csrf = req.csrfToken()
   next()
 } )
+
 
 io.adapter( redisAdapter() ) ;
 io.use( (socket, next) => {
