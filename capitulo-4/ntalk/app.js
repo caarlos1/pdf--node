@@ -6,7 +6,7 @@ const path = require('path')
 const consign = require('consign')
 const cookie = require('cookie')
 
-const compression = require('compression')
+// const compression = require('compression')
 const expressSession = require('express-session')
 const methodOverride = require('method-override')
 
@@ -31,7 +31,7 @@ const store = new RedisStore( {client: redisClient, prefix: config.sessionKey } 
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
-app.use( compression() )
+// app.use( compression() )
 app.use( expressSession({
   store,
   resave: true,
@@ -44,6 +44,9 @@ app.use( express.json() )
 app.use( express.urlencoded( { extended: true } ) )
 app.use( methodOverride('_method') ) // P/ habilitar a comunicação por outros métodos pelo formulário.
 app.use( express.static( path.join(__dirname, 'public'), { maxAge: 3600000 } ) )
+app.use( express.static( path.join(__dirname, 'public'), 
+// { maxAge: 3600000 } 
+) )
 
 io.adapter( redisAdapter() ) ;
 io.use( (socket, next) => {
