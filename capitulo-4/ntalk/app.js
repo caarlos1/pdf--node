@@ -87,7 +87,7 @@ app.use(error.notFound)
 app.use(error.serverError)
 
 // Start do Servidor
-server.listen(3000, console.log(`${ new Date() }: O Ntalk está no ar: http://localhost:3030`))
+server.listen(3000, console.log(`${ new Date() }: O Ntalk está no ar: http://localhost:3000`))
 
 // Exportando app para testes.
 module.exports = app
