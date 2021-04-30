@@ -6,6 +6,7 @@
 </header>
 <section>
     <form action="/entrar" method="post">
+        <input type="hidden" name="_csrf" value="<%- locals._csrf %>">
         <input type="text" name="usuario[nome]" placeholder="Nome">
         <br>
         <input type="text" name="usuario[email]" placeholder="E-mail">

@@ -16,6 +16,7 @@ const error = require('./middlewares/error')
 // Configuração do redis / socket.io-redis / connect-redis
 const redis = require('redis')
 const redisAdapter = require('socket.io-redis')
+const csurf = require('csurf')
 const RedisStore = require('connect-redis')(expressSession)
 const redisClient = redis.createClient()
 
@@ -43,10 +44,16 @@ app.use( expressSession({
 app.use( express.json() )
 app.use( express.urlencoded( { extended: true } ) )
 app.use( methodOverride('_method') ) // P/ habilitar a comunicação por outros métodos pelo formulário.
-app.use( express.static( path.join(__dirname, 'public'), { maxAge: 3600000 } ) )
 app.use( express.static( path.join(__dirname, 'public'), 
 // { maxAge: 3600000 } 
 ) )
+
+// Configurando csurf.
+app.use( csurf() )
+app.use( (req, res, next) => {
+  res.locals._csrf = req.csrfToken()
+  next()
+} )
 
 io.adapter( redisAdapter() ) ;
 io.use( (socket, next) => {
