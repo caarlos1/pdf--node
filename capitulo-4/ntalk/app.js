@@ -4,6 +4,7 @@ const http = require('http')
 const socketIO = require('socket.io')
 const consign = require('consign') // Para importar modulos.
 const cookie = require('cookie')
+const compression = require('compression')
 const expressSession = require('express-session')
 const methodOverride = require('method-override')
 
@@ -26,7 +27,7 @@ const store = new RedisStore( {client: redisClient, prefix: config.sessionKey } 
 app.set('views', path.join(__dirname, 'views')) // Set views.
 app.set('view engine', 'ejs')
 
-// Configurando a sessão do express.
+app.use( compression() )
 app.use( expressSession({
   store,
   resave: true,
@@ -38,7 +39,7 @@ app.use( expressSession({
 app.use( express.json() )
 app.use( express.urlencoded( { extended: true } ) )
 app.use( methodOverride('_method') ) // Para conseguir enviar um put e delete pelo formulario, sem ajax.
-app.use( express.static( path.join(__dirname, 'public') ) ) // Set arquivos estáticos
+app.use( express.static( path.join(__dirname, 'public'), { maxAge: 3600000 } ) ) // Set arquivos estáticos
 
 io.adapter( redisAdapter() ) ;
 io.use( (socket, next) => {
