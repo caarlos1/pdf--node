@@ -28,7 +28,7 @@ const io = socketIO(server)
 app.disable('x-powered-by') // Desativar Header.
 
 // Configuração de sessão no servidor
-const store = new RedisStore( {client: redisClient, prefix: config.sessionKey } )
+const store = new RedisStore( { client: redisClient, ...config.redisStore } )
 
 // Configurações da view
 app.set('views', path.join(__dirname, 'views'))
@@ -46,8 +46,9 @@ app.use( expressSession({
 app.use( express.json() )
 app.use( express.urlencoded( { extended: true } ) )
 app.use( methodOverride('_method') ) // P/ habilitar a comunicação por outros métodos pelo formulário.
-app.use( express.static( path.join(__dirname, 'public'), 
-// { maxAge: 3600000 } 
+app.use( express.static( 
+  path.join(__dirname, 'public'), 
+  // config.cache, 
 ) )
 
 // // Configuração do csurf para funcionar com os testes.
@@ -62,7 +63,7 @@ app.use( (req, res, next) => {
 } )
 
 
-io.adapter( redisAdapter() ) ;
+io.adapter( redisAdapter(config.redis) ) ;
 io.use( (socket, next) => {
   const cookieData = socket.request.headers.cookie // Cookie da request.
   const cookieObj = cookie.parse(cookieData) // Converte cookie em objeto.

@@ -1,4 +1,5 @@
-const redis = require('redis').createClient()
+const config = require('../config')
+const redis = require('redis').createClient(config.redis)
 
 module.exports = (app, io) => {
 // Conexão do Socket.io
