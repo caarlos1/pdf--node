@@ -5,7 +5,6 @@
   "private": true,
   "scripts": {
     "start": "DEBUG=* node app >> app.log",
-    "nodemon": "nodemon app.js",
     "test": "NODE_ENV=test mocha test/**/*.js --require should --exit"
   },
   "dependencies": {
