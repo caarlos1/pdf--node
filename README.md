@@ -5,3 +5,5 @@ Achei o material estudado muito interessa, mas um pouco desatualizado. Houve pro
 Resumindo, gostei bastante, deu pra aprender algumas coisas interessantes e abrir um pouco a cabeça. Considero que foi um tempo bem investido, produtivo e em até certos pontos prazerosos.
 
 Estou feliz, agora é continuar estudando. Obrigado! ;)
+
+## Finalizado em 01/05/2021
