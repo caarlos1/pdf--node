@@ -25,6 +25,8 @@ const app = express()
 const server = http.Server(app)
 const io = socketIO(server)
 
+app.disable('x-powered-by') // Desativar Header.
+
 // Configuração de sessão no servidor
 const store = new RedisStore( {client: redisClient, prefix: config.sessionKey } )
 
