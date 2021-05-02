@@ -7,4 +7,4 @@ Resumindo, gostei bastante, deu pra aprender algumas coisas interessantes e abri
 Estou feliz, agora é continuar estudando. Obrigado! ;)
 
 ## Finalizado em 01/05/2021
-### Tempo gasto: 54 pomodoros (22,5 horas)
+### Tempo: 54 pomodoros (22,5 horas)
